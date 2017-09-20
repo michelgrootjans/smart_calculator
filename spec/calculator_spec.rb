@@ -1,3 +1,5 @@
+require 'pry'
+
 class Plus
   def initialize(term)
     @term = term.to_i
@@ -18,7 +20,7 @@ class Min
   end
 
   def apply(other_term)
-    @term - other_term
+    other_term - @term
   end
 
   def render
@@ -33,16 +35,21 @@ class Calculator
     available_operations = arguments[:operations].map{|operation| create_operation(operation)}
     start = arguments[:start]
     goal = arguments[:goal]
+    solution = []
     
     1000.times do
       operations = (1..number_of_moves).map{|| available_operations.sample }
       outcome = operations.inject(start){|current_value, operation| operation.apply(current_value)}
+      # print outcome
+      # print operations
       if outcome == goal
-        return operations.map(&:render)        
+        solution = operations.map(&:render)
+        # print solution
+        break        
       end
     end
 
-    raise "onmogelijk"
+    return solution
   end
 
   
@@ -56,7 +63,6 @@ class Calculator
     raise "Operation not supported"
   end
 end
-
 
 describe "calculator" do
   it "null calculator returns an empty list of operations" do
@@ -80,7 +86,7 @@ describe "calculator" do
   end
 
   it "goal of -1 with an operation -1 returns [-1]" do
-    expect(Calculator.solve({start: 0, goal: 1, moves: 1, operations: ["-1"]})).to eq ["-1"]
+    expect(Calculator.solve({start: 0, goal: -1, moves: 1, operations: ["-1"]})).to eq ["-1"]
   end
 
   it { expect(Calculator.solve({start: 0, goal: 1, moves: 1, operations: ["+1", "-1"]})).to eq ["+1"] }
