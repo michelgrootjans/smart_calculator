@@ -1,4 +1,6 @@
 To get started
 
+Make sure you have ruby and bundler installed.
+
 > bundle install
-> guard init
+> bundle exec guard
