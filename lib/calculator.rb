@@ -41,8 +41,12 @@ class Multiplication
 end
 
 class Division
-  def initialize(term)
-    @term = term.to_i
+  def self.matches(operation)
+    operation[0] == "/"
+  end
+
+  def initialize(operation)
+    @term = operation[1].to_i
   end
 
   def apply(other_term)
@@ -62,10 +66,12 @@ class Shift
   end
 
   def initialize(operation)
+    # no need to save anything, operation contains exactly "<<"
   end
 
   def apply(term)
-    term.to_s[0...-1].to_i
+    term / 10 # surprised?
+    # 123/10 = 12 in ruby
   end
 
   def render
@@ -121,7 +127,7 @@ class Calculator
 
   
   @operations = [
-    Shift, Replace
+    Division, Shift, Replace
   ]
 
   def self.create_operation(description)
@@ -134,12 +140,6 @@ class Calculator
     if(description[0] == "x")
       return Multiplication.new(description[1])
     end
-    if(description[0] == "/")
-      return Division.new(description[1])
-    end
-    # if(description == "<<")
-      # return Shift.new()
-    # end
     @operations.each do |operation|
       if operation.matches(description)
         return operation.new(description)

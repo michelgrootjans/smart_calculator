@@ -20,9 +20,9 @@ end
 
 # special operations that require attention
 describe "division" do
-  it { expect(Division.new("2").apply(4)).to eq 2 }
-  it { expect{Division.new("2").apply(3)}.to raise_error("Error") }
-  it { expect{Division.new("0").apply(2)}.to raise_error(ZeroDivisionError) }
+  it { expect(Division.new("/2").apply(4)).to eq 2 }
+  it { expect{Division.new("/2").apply(3)}.to raise_error("Error") }
+  it { expect{Division.new("/0").apply(2)}.to raise_error(ZeroDivisionError) }
 end
 
 describe "shift" do
