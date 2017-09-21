@@ -12,7 +12,7 @@ describe "calculator" do
   it { expect(Calculator.solve({start: 12, goal: 1,  moves: 1, operations: ["<<"]})).to eq ["<<"] }
   it { expect(Calculator.solve({start: 12, goal: 13, moves: 1, operations: ["2=>3"]})).to eq ["2=>3"] }
   it { expect(Calculator.solve({start: 1,  goal: 11, moves: 1, operations: ["1"]})).to eq ["1"] }
-
+  
   # multiple moves
   it { expect(Calculator.solve({start: 0,  goal: 2,  moves: 2, operations: ["+1"]})).to eq ["+1","+1"] }
   it { expect(Calculator.solve({start: 0,  goal: 1,  moves: 1, operations: ["+1", "-1"]})).to eq ["+1"] }
@@ -21,6 +21,7 @@ describe "calculator" do
 
   # challenges
   it { expect(Calculator.solve({start: 11, goal: 29, moves: 5, operations: ["/2", "+3", "1=>2", "2=>9"]})).to eq ["+3", "1=>2", "/2", "2=>9", "1=>2"] }
+  it { expect(Calculator.solve({start: 9,  goal: 10, moves: 5, operations: ["+5", "x5", "+/-"]})).to eq ["+/-", "+5", "+5", "x5", "+5"] }
 end
 
 describe Addition do
@@ -60,4 +61,8 @@ describe Number do
   it { expect(Number.new("1").apply(0)).to eq 1 }
   it { expect(Number.new("1").apply(1)).to eq 11 }
   it { expect(Number.new("4").apply(123)).to eq 1234 }
+end
+
+describe ToggleSign do
+  it { expect(ToggleSign.new("+/-").apply(1234)).to eq -1234 }
 end

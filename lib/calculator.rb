@@ -1,6 +1,13 @@
+# monkey patching String
+class String
+  def is_i?
+     /\A[-+]?\d+\z/ === self
+  end
+end
+
 class Addition
   def self.can_perform?(description)
-    description[0] == "+"
+    description[0] == "+" && description.is_i?
   end
 
   attr_reader :description, :term
@@ -16,7 +23,7 @@ end
 
 class Subtraction
   def self.can_perform?(description)
-    description[0] == "-"
+    description[0] == "-" && description.is_i?
   end
 
   attr_reader :description, :term
@@ -32,7 +39,7 @@ end
 
 class Multiplication
   def self.can_perform?(description)
-    description[0] == "x"
+    description[0] == "x" && description[1..-1].is_i?
   end
 
   attr_reader :description, :factor
@@ -102,13 +109,6 @@ class Replace
   end
 end
 
-# monkey patching String
-class String
-  def is_i?
-     /\A[-+]?\d+\z/ === self
-  end
-end
-
 class Number
   def self.can_perform?(description)
     description.is_i?
@@ -124,6 +124,20 @@ class Number
   end
 end
 
+class ToggleSign
+  def self.can_perform?(description)
+    description == "+/-"
+  end
+    
+  attr_reader :description
+  def initialize(description)
+    @description = description
+  end
+
+  def apply(number)
+    -number
+  end
+end
 
 class Calculator
   def self.solve(arguments)
@@ -162,7 +176,7 @@ class Calculator
   end
 
   def self.operations
-    [ Addition, Subtraction, Multiplication, Division, Shift, Replace, Number ]
+    [ Addition, Subtraction, Multiplication, Division, Shift, Replace, Number, ToggleSign ]
   end
 end
 
