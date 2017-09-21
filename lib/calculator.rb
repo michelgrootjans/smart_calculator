@@ -46,7 +46,9 @@ class Division
   end
 
   def apply(other_term)
-    other_term / @term
+    div, mod = other_term.divmod(@term)
+    raise "Error" if mod != 0
+    div
   end
 
   def render
@@ -55,6 +57,13 @@ class Division
 end
 
 class Shift
+  def self.matches(operation)
+    operation == "<<"
+  end
+
+  def initialize(operation)
+  end
+
   def apply(term)
     term.to_s[0...-1].to_i
   end
@@ -96,19 +105,23 @@ class Calculator
     
     10000.times do
       operations = (1..number_of_moves).map{|| available_operations.sample }
-      outcome = operations.inject(start){|current_value, operation| operation.apply(current_value)}
+      begin
+        outcome = operations.inject(start){|current_value, operation| operation.apply(current_value)}
+      rescue
+        # an illegal operation occurred
+      end
       if outcome == goal
         solution = operations.map(&:render)
         break        
       end
-    end
+  end
 
     return solution
   end
 
   
   @operations = [
-    Replace
+    Shift, Replace
   ]
 
   def self.create_operation(description)
@@ -124,13 +137,9 @@ class Calculator
     if(description[0] == "/")
       return Division.new(description[1])
     end
-    if(description == "<<")
-      return Shift.new()
-    end
-    # if(description[1..2] == "=>")
-    #   return Replace.new(description[0], description[3])
+    # if(description == "<<")
+      # return Shift.new()
     # end
-
     @operations.each do |operation|
       if operation.matches(description)
         return operation.new(description)
