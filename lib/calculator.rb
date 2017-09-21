@@ -65,9 +65,14 @@ class Shift
 end
 
 class Replace
-  def initialize(from, to)
-    @from = from.to_s
-    @to = to.to_s
+  
+  def self.matches(operation)
+    operation[1..2] == "=>"
+  end
+
+  def initialize(operation)
+    @from = operation[0]
+    @to = operation[3]
   end
 
   def apply(number)
@@ -102,6 +107,10 @@ class Calculator
   end
 
   
+  @operations = [
+    Replace
+  ]
+
   def self.create_operation(description)
     if(description[0] == "+")
       return Addition.new(description[1])
@@ -118,8 +127,14 @@ class Calculator
     if(description == "<<")
       return Shift.new()
     end
-    if(description[1..2] == "=>")
-      return Replace.new(description[0], description[3])
+    # if(description[1..2] == "=>")
+    #   return Replace.new(description[0], description[3])
+    # end
+
+    @operations.each do |operation|
+      if operation.matches(description)
+        return operation.new(description)
+      end
     end
 
     raise "Operation not supported"

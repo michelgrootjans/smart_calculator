@@ -25,5 +25,5 @@ describe "shift" do
 end
 
 describe "replace" do
-  it { expect(Replace.new(2, 3).apply(12)).to eq 13 }
+  it { expect(Replace.new("2=>3").apply(12)).to eq 13 }
 end
