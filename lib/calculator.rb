@@ -1,4 +1,8 @@
 class Addition
+  def self.can_perform?(operation)
+    operation[0] == "+"
+  end
+
   def initialize(term)
     @term = term.to_i
   end
@@ -13,25 +17,25 @@ class Addition
 end
 
 class Subtraction
-  def self.matches(operation)
+  def self.can_perform?(operation)
     operation[0] == "-"
   end
 
   def initialize(operation)
-    @term = operation[1].to_i
+    @term = operation.to_i
   end
 
   def apply(other_term)
-    other_term - @term
+    other_term + @term
   end
 
   def render
-    "-" + @term.to_s
+    @term.to_s
   end
 end
 
 class Multiplication
-  def self.matches(operation)
+  def self.can_perform?(operation)
     operation[0] == "x"
   end
 
@@ -49,7 +53,7 @@ class Multiplication
 end
 
 class Division
-  def self.matches(operation)
+  def self.can_perform?(operation)
     operation[0] == "/"
   end
 
@@ -69,7 +73,7 @@ class Division
 end
 
 class Shift
-  def self.matches(operation)
+  def self.can_perform?(operation)
     operation == "<<"
   end
 
@@ -88,8 +92,7 @@ class Shift
 end
 
 class Replace
-  
-  def self.matches(operation)
+  def self.can_perform?(operation)
     operation[1..2] == "=>"
   end
 
@@ -112,7 +115,7 @@ class Calculator
   def self.solve(arguments)
     
     number_of_moves = arguments[:moves]
-    available_operations = arguments[:operations].map{|operation| create_operation(operation)}
+    available_operations = arguments[:operations].map{|operation_description| create_operation(operation_description)}
     start = arguments[:start]
     goal = arguments[:goal]
     solution = []
@@ -135,16 +138,13 @@ class Calculator
 
   
   @operations = [
-    Subtraction, Multiplication, Division, Shift, Replace
+    Addition, Subtraction, Multiplication, Division, Shift, Replace
   ]
 
-  def self.create_operation(description)
-    if(description[0] == "+")
-      return Addition.new(description[1])
-    end
+  def self.create_operation(operation_description)
     @operations.each do |operation|
-      if operation.matches(description)
-        return operation.new(description)
+      if operation.can_perform?(operation_description)
+        return operation.new(operation_description)
       end
     end
 
