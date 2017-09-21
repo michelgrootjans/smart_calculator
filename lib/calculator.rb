@@ -54,6 +54,32 @@ class Division
   end
 end
 
+class Shift
+  def apply(term)
+    term.to_s[0...-1].to_i
+  end
+
+  def render
+    "<<"
+  end
+end
+
+class Replace
+  def initialize(from, to)
+    @from = from.to_s
+    @to = to.to_s
+  end
+
+  def apply(number)
+    number.to_s.gsub(@from, @to).to_i
+  end
+
+  def render
+    @from.to_s + "=>" + @to.to_s
+  end
+end
+
+
 class Calculator
   def self.solve(arguments)
     
@@ -88,6 +114,12 @@ class Calculator
     end
     if(description[0] == "/")
       return Division.new(description[1])
+    end
+    if(description == "<<")
+      return Shift.new()
+    end
+    if(description[1..2] == "=>")
+      return Replace.new(description[0], description[3])
     end
 
     raise "Operation not supported"
