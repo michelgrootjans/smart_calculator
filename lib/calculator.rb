@@ -1,4 +1,4 @@
-class Plus
+class Addition
   def initialize(term)
     @term = term.to_i
   end
@@ -12,7 +12,7 @@ class Plus
   end
 end
 
-class Min
+class Subtraction
   def initialize(term)
     @term = term.to_i
   end
@@ -104,10 +104,10 @@ class Calculator
   
   def self.create_operation(description)
     if(description[0] == "+")
-      return Plus.new(description[1])
+      return Addition.new(description[1])
     end
     if(description[0] == "-")
-      return Min.new(description[1])
+      return Subtraction.new(description[1])
     end
     if(description[0] == "x")
       return Multiplication.new(description[1])
