@@ -26,6 +26,34 @@ class Min
   end
 end
 
+class Multiplication
+  def initialize(term)
+    @term = term.to_i
+  end
+
+  def apply(other_term)
+    other_term * @term
+  end
+
+  def render
+    "x" + @term.to_s
+  end
+end
+
+class Division
+  def initialize(term)
+    @term = term.to_i
+  end
+
+  def apply(other_term)
+    other_term / @term
+  end
+
+  def render
+    "/" + @term.to_s
+  end
+end
+
 class Calculator
   def self.solve(arguments)
     
@@ -55,6 +83,13 @@ class Calculator
     if(description[0] == "-")
       return Min.new(description[1])
     end
+    if(description[0] == "x")
+      return Multiplication.new(description[1])
+    end
+    if(description[0] == "/")
+      return Division.new(description[1])
+    end
+
     raise "Operation not supported"
   end
 end
