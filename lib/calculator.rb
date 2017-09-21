@@ -13,8 +13,12 @@ class Addition
 end
 
 class Subtraction
-  def initialize(term)
-    @term = term.to_i
+  def self.matches(operation)
+    operation[0] == "-"
+  end
+
+  def initialize(operation)
+    @term = operation[1].to_i
   end
 
   def apply(other_term)
@@ -131,15 +135,12 @@ class Calculator
 
   
   @operations = [
-    Multiplication, Division, Shift, Replace
+    Subtraction, Multiplication, Division, Shift, Replace
   ]
 
   def self.create_operation(description)
     if(description[0] == "+")
       return Addition.new(description[1])
-    end
-    if(description[0] == "-")
-      return Subtraction.new(description[1])
     end
     @operations.each do |operation|
       if operation.matches(description)
